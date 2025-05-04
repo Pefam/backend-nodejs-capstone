@@ -63,13 +63,13 @@ router.post('/', upload.single('file'), async (req, res, next) => {
   try {
     const db = await connectToDatabase()
     const collection = db.collection('secondChanceItems')
-    const lastItemQuery = await collection.find().sort({ 'id': -1 }).limit(1)
-    let secondChanceItem = req.body;
+    const lastItemQuery = await collection.find().sort({ id: -1 }).limit(1)
+    let secondChanceItem = req.body
     await lastItemQuery.forEach(item => {
       secondChanceItem.id = (parseInt(item.id) + 1).toString()
-    });
-    const date_added = Math.floor(new Date().getTime() / 1000)
-    secondChanceItem.date_added = date_added
+    })
+    const Date_Added = Math.floor(new Date().getTime() / 1000)
+    secondChanceItem.date_added = Date_Added
     secondChanceItem = await collection.insertOne(secondChanceItem)
     console.log(secondChanceItem)
     res.status(201).json(secondChanceItem)
@@ -79,26 +79,26 @@ router.post('/', upload.single('file'), async (req, res, next) => {
 })
 
 // Update and existing item
-router.put('/:id', async(req, res,next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const id = req.params.id
     // Step 5: task 1 - insert code here
     const db = await connectToDatabase()
     // Step 5: task 2 - insert code here
-    const collection = db.collection("secondChanceItems")
+    const collection = db.collection('secondChanceItems')
     // Step 5: task 3 - insert code here
     const secondChanceItem = await collection.findOne({ id })
 
     if (!secondChanceItem) {
       logger.error('secondChanceItem not found')
-      return res.status(404).json({ error: "secondChanceItem not found" })
+      return res.status(404).json({ error: 'secondChanceItem not found' })
     }
     // Step 5: task 4 - insert code here
     secondChanceItem.category = req.body.category
     secondChanceItem.condition = req.body.condition
     secondChanceItem.age_days = req.body.age_days
     secondChanceItem.description = req.body.description
-    secondChanceItem.age_years = Number((secondChanceItem.age_days/365).toFixed(1))
+    secondChanceItem.age_years = Number((secondChanceItem.age_days / 365).toFixed(1))
     secondChanceItem.updatedAt = new Date()
 
     const updatepreloveItem = await collection.findOneAndUpdate(

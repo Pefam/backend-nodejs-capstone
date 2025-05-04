@@ -1,10 +1,9 @@
 require('dotenv').config()
 const express = require('express')
-const axios = require('axios')
 const logger = require('./logger')
 const expressPino = require('express-pino-logger')({ logger })
 // Task 1: import the natural library
-const natural = require("natural")
+const natural = require('natural')
 
 // Task 2: initialize the express server
 const app = express()
@@ -16,10 +15,8 @@ app.use(expressPino)
 // Define the sentiment analysis route
 // Task 3: create the POST /sentiment analysis
 app.post('/sentiment', async (req, res) => {
-
-    // Task 4: extract the sentence parameter
+  // Task 4: extract the sentence parameter
   const { sentence } = req.query
-
 
   if (!sentence) {
     logger.error('No sentence provided')
@@ -29,19 +26,19 @@ app.post('/sentiment', async (req, res) => {
   // Initialize the sentiment analyzer with the Natural's PorterStemmer and "English" language
   const Analyzer = natural.SentimentAnalyzer
   const stemmer = natural.PorterStemmer
-  const analyzer = new Analyzer("English", stemmer, "afinn")
+  const analyzer = new Analyzer('English', stemmer, 'afinn')
 
   // Perform sentiment analysis
   try {
     const analysisResult = analyzer.getSentiment(sentence.split(' '))
 
-    let sentiment = "neutral"
+    let sentiment = 'neutral'
 
     // Task 5: set sentiment to negative or positive based on score rules
     if (analysisResult < 0) {
-      sentiment = "negative"
+      sentiment = 'negative'
     } else if (analysisResult > 0.33) {
-      sentiment = "positive"
+      sentiment = 'positive'
     }
 
     // Logging the result

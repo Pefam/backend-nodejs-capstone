@@ -107,10 +107,10 @@ router.put('/:id', async (req, res, next) => {
       { returnDocument: 'after' }
     )
     // Step 5: task 5 - insert code here
-    if( updatepreloveItem ) {
-      res.json( { uploaded:'success' } )
+    if (updatepreloveItem) {
+      res.json({ uploaded: 'success' })
     } else {
-      res.json( { uploaded:'failed' } );
+      res.json({ uploaded: 'failed' })
     }
   } catch (e) {
     next(e)

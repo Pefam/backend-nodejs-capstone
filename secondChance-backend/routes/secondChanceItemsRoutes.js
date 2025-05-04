@@ -39,26 +39,6 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-// Add a new item
-router.post('/', upload.single('file'), async(req, res,next) => {
-    try {
-        const db = await connectToDatabase();
-        const collection = db.collection("secondChanceItems");
-        const lastItemQuery = await collection.find().sort({'id': -1}).limit(1);
-        let secondChanceItem = req.body;
-        await lastItemQuery.forEach(item => {
-            secondChanceItem.id = (parseInt(item.id) + 1).toString();
-        });
-        const date_added = Math.floor(new Date().getTime() / 1000);
-        secondChanceItem.date_added = date_added
-        secondChanceItem = await collection.insertOne(secondChanceItem);
-        console.log(secondChanceItem);
-        res.status(201).json(secondChanceItem);
-    } catch (e) {
-        next(e);
-    }
-});
-
 // Get a single secondChanceItem by ID
 router.get('/:id', async (req, res, next) => {
     try {
@@ -75,6 +55,26 @@ router.get('/:id', async (req, res, next) => {
         }
 
         res.json(secondChanceItem);
+    } catch (e) {
+        next(e);
+    }
+});
+
+// Add a new item
+router.post('/', upload.single('file'), async(req, res,next) => {
+    try {
+        const db = await connectToDatabase();
+        const collection = db.collection("secondChanceItems");
+        const lastItemQuery = await collection.find().sort({'id': -1}).limit(1);
+        let secondChanceItem = req.body;
+        await lastItemQuery.forEach(item => {
+            secondChanceItem.id = (parseInt(item.id) + 1).toString();
+        });
+        const date_added = Math.floor(new Date().getTime() / 1000);
+        secondChanceItem.date_added = date_added
+        secondChanceItem = await collection.insertOne(secondChanceItem);
+        console.log(secondChanceItem);
+        res.status(201).json(secondChanceItem);
     } catch (e) {
         next(e);
     }

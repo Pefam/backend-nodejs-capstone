@@ -68,8 +68,8 @@ router.post('/', upload.single('file'), async (req, res, next) => {
     await lastItemQuery.forEach(item => {
       secondChanceItem.id = (parseInt(item.id) + 1).toString()
     })
-    const Date_Added = Math.floor(new Date().getTime() / 1000)
-    secondChanceItem.date_added = Date_Added
+    const dateAdded = Math.floor(new Date().getTime() / 1000)
+    secondChanceItem.date_added = dateAdded
     secondChanceItem = await collection.insertOne(secondChanceItem)
     console.log(secondChanceItem)
     res.status(201).json(secondChanceItem)
@@ -107,10 +107,10 @@ router.put('/:id', async (req, res, next) => {
       { returnDocument: 'after' }
     )
     // Step 5: task 5 - insert code here
-    if(updatepreloveItem) {
-      res.json({"uploaded":"success"})
+    if( updatepreloveItem ) {
+      res.json( { uploaded:'success' } )
     } else {
-      res.json({"uploaded":"failed"});
+      res.json( { uploaded:'failed' } );
     }
   } catch (e) {
     next(e)
